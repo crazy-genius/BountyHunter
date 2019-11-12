@@ -20,3 +20,4 @@
 ###< symfony/web-server-bundle ###
 
 /docker/nginx/logs/*.log
+/docker/mysql/data/
