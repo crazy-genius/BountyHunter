@@ -34,6 +34,9 @@ services:
     BountyHunter\Infrastructure\User\Persistence\:
         resource: '../src/Infrastructure/User/Persistence/'
 
+    BountyHunter\UI\CLI\Bounty\:
+        resource: '../src/UI/CLI/Bounty/'
+
     #Fixtures
     BountyHunter\DataFixtures\:
         resource: '../src/DataFixtures/'
