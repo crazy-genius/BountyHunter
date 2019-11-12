@@ -10,7 +10,7 @@ use BountyHunter\Domain\Bounty\BountyType;
  * Class Bonus
  * @package BountyHunter\Domain\Bounty\Entity
  */
-class Bonus implements BountyInterface
+class Bonus extends AbstractBounty
 {
     /** @var int */
     private $amount;
@@ -22,21 +22,19 @@ class Bonus implements BountyInterface
      */
     public function __construct(int $amount)
     {
+        parent::__construct();
         $this->amount = $amount;
     }
 
+    /** @inheritDoc */
+    public function __toString(): string
+    {
+        return parent::__toString() . ' amount is ' . $this->amount;
+    }
+
+    /** @inheritDoc */
     public function type(): BountyType
     {
-        // TODO: Implement type() method.
-    }
-
-    public function isAccepted(): bool
-    {
-        // TODO: Implement isAccepted() method.
-    }
-
-    public function isSent(): bool
-    {
-        // TODO: Implement isSent() method.
+        return BountyType::createBonusType();
     }
 }

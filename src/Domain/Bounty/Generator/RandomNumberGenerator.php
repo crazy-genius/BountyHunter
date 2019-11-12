@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace BountyHunter\Domain\Bounty\Generator;
 
-
 /**
- * Class GiftBountyGenerator
+ * Class RandomGenerator
  * @package BountyHunter\Domain\Bounty\Generator
  */
-class GiftBountyGenerator implements BountyGeneratorInterface
+class RandomNumberGenerator
 {
     /**
+     * @param int $min
+     * @param int $max
+     *
      * @return int
      */
-    public function generate(): int
+    public function generate(int $min, int $max): int
     {
         try {
-            return \random_int(10, 200);
+            return \random_int($min, $max);
         } catch (\Exception $exception) {
-
             //TODO throw custom exception !!
         }
     }

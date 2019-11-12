@@ -13,15 +13,28 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    App\:
-        resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+#    BountyHunter\:
+#        resource: '../src/*'
+#        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller'
+    BountyHunter\UI\Web\Bounty\Controller\:
+        resource: '../src/UI/Web/Bounty/Controller/'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    BountyHunter\Infrastructure\Bounty\AllBountiesProvider:
+        public: false
+    BountyHunter\Domain\Bounty\AllowedBountyTypesProviderInterface:
+        alias: BountyHunter\Infrastructure\Bounty\AllBountiesProvider
+    BountyHunter\Domain\Bounty\Generator\RandomNumberGenerator:
+    BountyHunter\Domain\Bounty\Generator\BountyGenerator:
+    BountyHunter\Domain\Bounty\BountyFactory:
+
+    BountyHunter\Infrastructure\User\Persistence\:
+        resource: '../src/Infrastructure/User/Persistence/'
+
+    #Fixtures
+    BountyHunter\DataFixtures\:
+        resource: '../src/DataFixtures/'
+        tags: ['doctrine.fixture.orm']

@@ -8,7 +8,7 @@ use BountyHunter\Domain\Bounty\Entity\Bonus;
 use BountyHunter\Domain\Bounty\Entity\BountyInterface;
 use BountyHunter\Domain\Bounty\Entity\Gift;
 use BountyHunter\Domain\Bounty\Entity\Money;
-use BountyHunter\Domain\Bounty\Generator\BountyGeneratorInterface;
+use BountyHunter\Domain\Bounty\Generator\RandomNumberGenerator;
 
 /**
  * Class BountyFactory
@@ -16,30 +16,52 @@ use BountyHunter\Domain\Bounty\Generator\BountyGeneratorInterface;
  */
 class BountyFactory
 {
-    /** @var BountyGeneratorInterface */
-    private $moneyGenerator;
+    /**
+     * @var RandomNumberGenerator
+     */
+    private $randomGenerator;
 
     /**
-     * @var BountyGeneratorInterface
+     * BountyFactory constructor.
+     *
+     * @param RandomNumberGenerator $randomGenerator
      */
-    private $giftGenerator;
+    public function __construct(RandomNumberGenerator $randomGenerator)
+    {
+        $this->randomGenerator = $randomGenerator;
+    }
 
     /**
-     * @var BountyGeneratorInterface
+     * @param BountyType $bountyType
+     *
+     * @return BountyInterface
+     * @throws UnknownBountyTypeException
      */
-    private $bonusGenerator;
-
-    public function createMoneyBounty(): BountyInterface
+    public function create(BountyType $bountyType): BountyInterface
     {
-        return new Money($this->moneyGenerator->generate());
+        switch (true) {
+            case $bountyType->equals(BountyType::createBonusType()):
+                return $this->createBonusBounty();
+            case $bountyType->equals(BountyType::createMoneyType()):
+                return $this->createMoneyBounty();
+            case $bountyType->equals(BountyType::createGiftType()):
+                return $this->createGiftBounty();
+        }
+
+        throw new UnknownBountyTypeException((string)$bountyType);
     }
 
-    public function createBonusBounty(): BountyInterface
+    private function createMoneyBounty(): BountyInterface
     {
-        return new Bonus($this->bonusGenerator->generate());
+        return new Money($this->randomGenerator->generate(100, 900));
     }
 
-    public function createGiftBounty(): BountyInterface
+    private function createBonusBounty(): BountyInterface
+    {
+        return new Bonus($this->randomGenerator->generate(200, 300));
+    }
+
+    private function createGiftBounty(): BountyInterface
     {
         return new Gift();
     }

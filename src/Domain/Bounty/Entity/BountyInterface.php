@@ -12,7 +12,8 @@ use BountyHunter\Domain\Bounty\BountyType;
  */
 interface BountyInterface
 {
+    public function __toString(): string;
     public function type(): BountyType;
-    public function isAccepted(): bool;
+    public function isRefused(): bool;
     public function isSent(): bool;
 }
