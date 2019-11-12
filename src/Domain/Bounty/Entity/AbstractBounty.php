@@ -12,14 +12,22 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * Class AbstractBounty
  * @package BountyHunter\Domain\Bounty\Entity
- * @ORM\MappedSuperclass()
+ * @ORM\Entity()
+ * @ORM\Table(name="bounty")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name = "discr", type = "string")
+ * @ORM\DiscriminatorMap({
+ *     "BONUS" = "BountyHunter\Domain\Bounty\Entity\Bonus",
+ *     "MONEY" = "BountyHunter\Domain\Bounty\Entity\Money",
+ *     "GIFT" = "BountyHunter\Domain\Bounty\Entity\Gift",
+ * })
  */
 abstract class AbstractBounty implements BountyInterface
 {
     /**
      * @var UuidInterface
      * @ORM\Id()
-     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\Column(name="id", type="uuid", unique=true)
      * @ORM\GeneratedValue(strategy="NONE")
      */
     protected $id;
