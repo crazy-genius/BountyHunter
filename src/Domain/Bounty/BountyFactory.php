@@ -2,13 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BountyHunter\Domain;
+namespace BountyHunter\Domain\Bounty;
 
+use BountyHunter\Domain\Bounty\Entity\Bonus;
+use BountyHunter\Domain\Bounty\Entity\BountyInterface;
+use BountyHunter\Domain\Bounty\Entity\Gift;
+use BountyHunter\Domain\Bounty\Entity\Money;
 use BountyHunter\Domain\Bounty\Generator\BountyGeneratorInterface;
 
 /**
  * Class BountyFactory
- * @package BountyHunter\Domain
+ * @package BountyHunter\Domain\Bounty
  */
 class BountyFactory
 {

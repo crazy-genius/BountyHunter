@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BountyHunter\Domain;
+namespace BountyHunter\Domain\Bounty;
 
 use Throwable;
 
 /**
  * Class UnknownBountyTypeException
- * @package BountyHunter\Domain
+ * @package BountyHunter\Domain\Bounty
  */
 class UnknownBountyTypeException extends \Exception
 {

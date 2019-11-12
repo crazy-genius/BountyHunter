@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BountyHunter\Domain;
+namespace BountyHunter\Domain\Bounty\Entity;
+
+use BountyHunter\Domain\Bounty\BountyType;
 
 /**
  * Class Gift
- * @package BountyHunter\Domain
+ * @package BountyHunter\Domain\Bounty\Entity
  */
 class Gift implements BountyInterface
 {

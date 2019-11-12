@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BountyHunter\Domain;
+namespace BountyHunter\Domain\Bounty;
 
 /**
  * Class BountyType
- * @package BountyHunter\Domain
+ * @package BountyHunter\Domain\Bounty
  */
 final class BountyType
 {
