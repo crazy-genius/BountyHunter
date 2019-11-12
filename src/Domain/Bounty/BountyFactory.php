@@ -9,6 +9,7 @@ use BountyHunter\Domain\Bounty\Entity\BountyInterface;
 use BountyHunter\Domain\Bounty\Entity\Gift;
 use BountyHunter\Domain\Bounty\Entity\Money;
 use BountyHunter\Domain\Bounty\Generator\RandomNumberGenerator;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * Class BountyFactory
@@ -22,13 +23,20 @@ class BountyFactory
     private $randomGenerator;
 
     /**
+     * @var Security
+     */
+    private $securityContext;
+
+    /**
      * BountyFactory constructor.
      *
      * @param RandomNumberGenerator $randomGenerator
+     * @param Security $security
      */
-    public function __construct(RandomNumberGenerator $randomGenerator)
+    public function __construct(RandomNumberGenerator $randomGenerator, Security $security)
     {
         $this->randomGenerator = $randomGenerator;
+        $this->securityContext = $security;
     }
 
     /**
@@ -53,16 +61,16 @@ class BountyFactory
 
     private function createMoneyBounty(): BountyInterface
     {
-        return new Money($this->randomGenerator->generate(100, 900));
+        return new Money($this->securityContext->getUser(), $this->randomGenerator->generate(100, 900));
     }
 
     private function createBonusBounty(): BountyInterface
     {
-        return new Bonus($this->randomGenerator->generate(200, 300));
+        return new Bonus($this->securityContext->getUser(), $this->randomGenerator->generate(200, 300));
     }
 
     private function createGiftBounty(): BountyInterface
     {
-        return new Gift();
+        return new Gift($this->securityContext->getUser());
     }
 }
