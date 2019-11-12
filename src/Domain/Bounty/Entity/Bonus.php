@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace BountyHunter\Domain\Bounty\Entity;
 
 use BountyHunter\Domain\Bounty\BountyType;
+use BountyHunter\Domain\User\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Bonus
  * @package BountyHunter\Domain\Bounty\Entity
+ * @ORM\Entity()
  */
 class Bonus extends AbstractBounty
 {
@@ -18,11 +21,12 @@ class Bonus extends AbstractBounty
     /**
      * Bonus constructor.
      *
+     * @param User $owner
      * @param int $amount
      */
-    public function __construct(int $amount)
+    public function __construct(User $owner, int $amount)
     {
-        parent::__construct();
+        parent::__construct($owner);
         $this->amount = $amount;
     }
 

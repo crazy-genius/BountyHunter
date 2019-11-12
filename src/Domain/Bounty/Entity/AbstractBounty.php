@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace BountyHunter\Domain\Bounty\Entity;
 
+use BountyHunter\Domain\User\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class AbstractBounty
@@ -13,6 +16,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 abstract class AbstractBounty implements BountyInterface
 {
+    /**
+     * @var UuidInterface
+     * @ORM\Id()
+     * @ORM\Column(type="uuid", unique=true)
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    protected $id;
+
     /**
      * @var bool
      * @ORM\Column(name="refused", type="boolean")
@@ -26,12 +37,21 @@ abstract class AbstractBounty implements BountyInterface
     protected $sent;
 
     /**
-     * AbstractBounty constructor.
+     * @var User
      */
-    public function __construct()
+    protected $owner;
+
+    /**
+     * AbstractBounty constructor.
+     *
+     * @param User $owner
+     */
+    public function __construct(User $owner)
     {
+        $this->id = Uuid::uuid4();
         $this->refused = false;
         $this->sent = false;
+        $this->owner = $owner;
     }
 
     /** @inheritDoc */

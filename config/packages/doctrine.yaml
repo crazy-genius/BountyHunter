@@ -11,6 +11,8 @@ doctrine:
         default_table_options:
             charset: utf8mb4
             collate: utf8mb4_unicode_ci
+        types:
+          uuid:  Ramsey\Uuid\Doctrine\UuidType
 
         url: '%env(resolve:DATABASE_URL)%'
     orm:
@@ -24,3 +26,9 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Domain/User/Entity'
                 prefix: 'BountyHunter\Domain\User\Entity'
                 alias: BountyHunter/Domain/User
+            BountyHunter/Domain/Bounty:
+              is_bundle: false
+              type: annotation
+              dir: '%kernel.project_dir%/src/Domain/Bounty/Entity'
+              prefix: 'BountyHunter\Domain\Bounty\Entity'
+              alias: BountyHunter/Domain/Bounty
