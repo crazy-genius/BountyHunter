@@ -1,0 +1,28 @@
+version: "3.1"
+
+services:
+  db:
+    image: mysql:8.0.17
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABSE=bounty_hunter
+  php:
+    build: ./php
+    expose:
+      - 9000
+    links:
+      - db
+    volumes:
+      - ../:/opt/app
+  nginx:
+    image: nginx
+    ports:
+      - 8080:80
+    depends_on:
+      - php
+    links:
+      - php
+    volumes:
+      - ./nginx/hosts:/etc/nginx/conf.d
+      - ../:/opt/app
+      - ./nginx/logs:/var/log/nginx
