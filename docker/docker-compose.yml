@@ -5,7 +5,14 @@ services:
     image: mysql:8.0.17
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABSE=bounty_hunter
+      - MYSQL_DATABASE=bounty_hunter
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/conf.d/mysql.cnf:ro
+    expose:
+      - 3306
+    ports:
+      - 3307:3306
   php:
     build: ./php
     expose:
