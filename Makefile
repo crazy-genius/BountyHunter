@@ -23,11 +23,8 @@ rebuild_images:
 test: composer_install composer_autoload
 	php bin/phpunit
 
-first_start: start
-	composer_install
-	composer_autoload
-	composer_env
-	${DOCKER} bin/console make:migrate --allow-no-migration -n
+first_start: start composer_install composer_autoload composer_env
+	${DOCKER} bin/console doctrine:migration:migrate --allow-no-migration -n
 	${DOCKER} bin/console doctrine:fixtures:load -n
 
 send:
