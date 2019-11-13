@@ -2,6 +2,8 @@
 
 - make first_start
 
+Адресс по умолчанию http://localhost:8080
+
 Для авторизации
 
 - User: alex Password: some_pass
