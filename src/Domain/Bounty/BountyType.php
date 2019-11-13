@@ -73,7 +73,7 @@ final class BountyType
             self::GIFT
         ];
 
-        if (!\in_array($this, $knownMap, true)) {
+        if (!\in_array($type, $knownMap, true)) {
             throw new UnknownBountyTypeException($type);
         }
 

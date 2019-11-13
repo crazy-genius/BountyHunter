@@ -12,18 +12,18 @@ use Doctrine\ORM\QueryBuilder;
  * Class NotSandedMoneySpecification
  * @package BountyHunter\Domian\Bounty\Specification
  */
-class NotSandedMoneySpecification implements SpecificationInterface
+class NotSendedMoneySpecification implements SpecificationInterface
 {
-    /** @var int */
+    /** @var int|null */
     protected $limit;
-    /** @var int */
+    /** @var int|null */
     protected $offset;
 
     /**
      * NotSandedMoneySpecification constructor.
      *
-     * @param int $limit
-     * @param int $offset
+     * @param int|null $limit
+     * @param int|null $offset
      */
     public function __construct(?int $limit = null, ?int $offset = null)
     {
@@ -47,11 +47,11 @@ class NotSandedMoneySpecification implements SpecificationInterface
             ])
         ;
 
-        if ($this->limit > 0) {
+        if ($this->offset !== null && $this->offset > 0) {
             $builder->setFirstResult($this->offset);
         }
 
-        if ($this->offset > 0) {
+        if ($this->limit !== null && $this->limit > 0) {
             $builder->setMaxResults($this->limit);
         }
 

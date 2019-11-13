@@ -44,4 +44,12 @@ class Bonus extends AbstractBounty
     {
         return BountyType::createBonusType();
     }
+
+    /**
+     * @return int
+     */
+    public function amount(): int
+    {
+        return $this->amount;
+    }
 }

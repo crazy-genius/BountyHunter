@@ -6,9 +6,9 @@ namespace BountyHunter\Domain\Bounty\Converter;
 
 /**
  * Class ConvectorException
- * @package BountyHunter\Domain\Bounty\Convector
+ * @package BountyHunter\Domain\Bounty\Converter
  */
-class ConvectorException extends \Exception
+class ConverterException extends \Exception
 {
 
 }

@@ -6,7 +6,7 @@ namespace BountyHunter\UI\CLI\Bounty;
 
 use BountyHunter\Domain\Bounty\BonusRepositoryInterface;
 use BountyHunter\Domain\Bounty\Entity\BountyInterface;
-use BountyHunter\Domain\Bounty\Specification\NotSandedMoneySpecification;
+use BountyHunter\Domain\Bounty\Specification\NotSendedMoneySpecification;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
@@ -62,13 +62,13 @@ class DeliveryCommand extends Command
 
         $pack = $input->getOption('pack');
 
-        if (!\is_numeric($pack) || $pack === 0) {
+        if (!\is_numeric($pack) || (int)$pack === 0) {
             throw new InvalidArgumentException('Pack should to be a numeric greater than zero');
         }
         $pack = (int)$pack;
         $output->writeln('Pack size: '.$pack);
 
-        $total = $this->bonusRepository->count(new NotSandedMoneySpecification());
+        $total = $this->bonusRepository->count(new NotSendedMoneySpecification());
         if ($total === 0) {
             $output->writeln([
                 'No bonuses to send exit ...',
@@ -96,7 +96,7 @@ class DeliveryCommand extends Command
     private function proceedAll(OutputInterface $output): int
     {
         $count = 0;
-        foreach ($this->bonusRepository->match(new NotSandedMoneySpecification()) as $bounty) {
+        foreach ($this->bonusRepository->match(new NotSendedMoneySpecification()) as $bounty) {
             $this->sendMoney($bounty);
             $this->entityManage->persist($bounty);
             $count++;
@@ -120,7 +120,7 @@ class DeliveryCommand extends Command
         $count = 0;
 
         foreach (\range(0, $total, $packSize) as $key => $pack) {
-            $bonuses = $this->bonusRepository->match(new NotSandedMoneySpecification($packSize, $key));
+            $bonuses = $this->bonusRepository->match(new NotSendedMoneySpecification($packSize, $key));
 
             foreach ($bonuses as $bounty) {
                 $this->sendMoney($bounty);
