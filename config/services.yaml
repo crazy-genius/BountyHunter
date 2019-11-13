@@ -30,6 +30,7 @@ services:
     BountyHunter\Domain\Bounty\Generator\RandomNumberGenerator:
     BountyHunter\Domain\Bounty\Generator\BountyGenerator:
     BountyHunter\Domain\Bounty\BountyFactory:
+    BountyHunter\Domain\Bounty\BountyReturnService:
 
     BountyHunter\Infrastructure\User\Persistence\:
         resource: '../src/Infrastructure/User/Persistence/'

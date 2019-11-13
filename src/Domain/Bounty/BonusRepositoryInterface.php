@@ -6,6 +6,7 @@ namespace BountyHunter\Domain\Bounty;
 
 use BountyHunter\Domain\Bounty\Entity\BountyInterface;
 use BountyHunter\Domain\Bounty\Specification\SpecificationInterface;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Interface BonusRepositoryInterface
@@ -13,6 +14,14 @@ use BountyHunter\Domain\Bounty\Specification\SpecificationInterface;
  */
 interface BonusRepositoryInterface
 {
+    /**
+     * @param UuidInterface $uuid
+     *
+     * @return BountyInterface
+     * @throws BountyReturnException
+     */
+    public function get(UuidInterface $uuid): BountyInterface;
+
     /**
      * @return BountyInterface[]
      */
@@ -40,5 +49,5 @@ interface BonusRepositoryInterface
     /**
      * @param BountyInterface $bounty
      */
-    public function add(BountyInterface $bounty): void;
+    public function save(BountyInterface $bounty): void;
 }

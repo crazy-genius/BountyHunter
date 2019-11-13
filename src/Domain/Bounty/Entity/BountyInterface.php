@@ -15,6 +15,7 @@ interface BountyInterface
     public function __toString(): string;
     public function type(): BountyType;
     public function isRefused(): bool;
+    public function send(): void;
     public function isSent(): bool;
     public function refuse(): void;
 }

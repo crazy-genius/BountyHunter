@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace BountyHunter\UI\CLI\Bounty;
 
 use BountyHunter\Domain\Bounty\BonusRepositoryInterface;
+use BountyHunter\Domain\Bounty\Entity\BountyInterface;
 use BountyHunter\Domain\Bounty\Specification\NotSandedMoneySpecification;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,16 +25,19 @@ class DeliveryCommand extends Command
 
     /** @var BonusRepositoryInterface */
     private $bonusRepository;
+    /** @var EntityManagerInterface */
+    private $entityManage;
 
     /**
      * DeliveryCommand constructor.
      *
      * @param BonusRepositoryInterface $bonusRepository
      */
-    public function __construct(BonusRepositoryInterface $bonusRepository)
+    public function __construct(BonusRepositoryInterface $bonusRepository, EntityManagerInterface $entityManage)
     {
         parent::__construct(null);
         $this->bonusRepository = $bonusRepository;
+        $this->entityManage = $entityManage;
     }
 
     /** @inheritDoc */
@@ -77,18 +82,30 @@ class DeliveryCommand extends Command
         $output->writeln('Total bonuses to send: '.$total);
 
         if ($total <= $pack) {
-            return $this->proceedAll();
+            return $this->proceedAll($output);
         }
 
-        return $this->proceedByPack($total, $pack);
+        return $this->proceedByPack($output, $total, $pack);
     }
 
     /**
+     * @param OutputInterface $output
+     *
      * @return int
      */
-    private function proceedAll(): int
+    private function proceedAll(OutputInterface $output): int
     {
-        //TODO make logic;
+        $count = 0;
+        foreach ($this->bonusRepository->match(new NotSandedMoneySpecification()) as $bounty) {
+            $this->sendMoney($bounty);
+            $this->entityManage->persist($bounty);
+            $count++;
+        }
+
+        $this->entityManage->flush();
+
+        $output->writeln("Complete. {$count} was send.");
+
         return 0;
     }
 
@@ -98,13 +115,32 @@ class DeliveryCommand extends Command
      *
      * @return int
      */
-    private function proceedByPack(int $total, int $packSize): int
+    private function proceedByPack(OutputInterface $output, int $total, int $packSize): int
     {
+        $count = 0;
+
         foreach (\range(0, $total, $packSize) as $key => $pack) {
-            //$bonuses = $this->bonusRepository->match(new NotSandedMoneySpecification($packSize, $key));
-            echo "#{$key}" . 'DO something'.PHP_EOL;
+            $bonuses = $this->bonusRepository->match(new NotSandedMoneySpecification($packSize, $key));
+
+            foreach ($bonuses as $bounty) {
+                $this->sendMoney($bounty);
+            }
+
+            $this->entityManage->persist($bonuses);
+            $this->entityManage->flush();
         }
 
+        $output->writeln("Complete. {$count} was send.");
+
         return 0;
+    }
+
+    /**
+     * @param BountyInterface $bounty
+     */
+    private function sendMoney(BountyInterface $bounty): void
+    {
+        $bounty->send();
+        //TODO some extra logic
     }
 }

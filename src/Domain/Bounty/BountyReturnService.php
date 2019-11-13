@@ -18,6 +18,16 @@ class BountyReturnService
     private $bountyRepository;
 
     /**
+     * BountyReturnService constructor.
+     *
+     * @param BonusRepositoryInterface $bountyRepository
+     */
+    public function __construct(BonusRepositoryInterface $bountyRepository)
+    {
+        $this->bountyRepository = $bountyRepository;
+    }
+
+    /**
      * @param BountyInterface $bounty
      *
      * @throws BountyReturnException

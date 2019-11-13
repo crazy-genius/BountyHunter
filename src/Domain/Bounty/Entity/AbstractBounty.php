@@ -70,10 +70,26 @@ abstract class AbstractBounty implements BountyInterface
         return 'The bounty is ' . $this->type();
     }
 
+    /**
+     * @return UuidInterface
+     */
+    public function getId(): UuidInterface
+    {
+        return $this->id;
+    }
+
     /** @inheritDoc */
     public function refuse(): void
     {
         $this->refused = true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function send(): void
+    {
+        $this->sent = true;
     }
 
     /** @inheritDoc */

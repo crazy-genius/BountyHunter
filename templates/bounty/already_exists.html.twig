@@ -1,0 +1,10 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Congratulations !{% endblock %}
+{% block body %}
+    <p>У вас уже есть приз</p>
+    <p>Ваш приз:</p>
+    <p>{{ bounty }}</p>
+
+    {{ include('bounty/refuse.html.twig', sandboxed = true) }}
+{% endblock %}
