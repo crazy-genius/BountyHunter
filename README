@@ -1,0 +1,12 @@
+Для первого запуска
+
+- make first_start
+
+Для авторизации
+
+- User: alex Password: some_pass
+- User: ustas Password: some_second_pass
+
+Запуск комманды отправки д/с
+
+- make send money
