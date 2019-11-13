@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BountyHunter\Domain\Bounty\Convector;
+namespace BountyHunter\Domain\Bounty\Converter;
 
 use BountyHunter\Domain\Bounty\Entity\Bonus;
 use BountyHunter\Domain\Bounty\Entity\Money;
+use BountyHunter\Domain\Money\RefundService;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 
@@ -18,8 +20,24 @@ class MoneyToBonusConvector
 {
     /** @var float */
     private $coefficient;
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     private $entityManger;
+    /** @var RefundService */
+    private $moneyRefund;
+
+    /**
+     * MoneyToBonusConvector constructor.
+     *
+     * @param float $coefficient
+     * @param EntityManagerInterface $entityManger
+     * @param RefundService $moneyRefund
+     */
+    public function __construct(float $coefficient, EntityManagerInterface $entityManger, RefundService $moneyRefund)
+    {
+        $this->coefficient = $coefficient;
+        $this->entityManger = $entityManger;
+        $this->moneyRefund = $moneyRefund;
+    }
 
     /**
      * @param Money $money
@@ -34,8 +52,8 @@ class MoneyToBonusConvector
         }
 
         $bonus = $money->toBonus($this->coefficient);
-
         $money->refuse();
+
         try {
             $this->entityManger->persist($money);
         } catch (ORMException $e) {
@@ -47,6 +65,8 @@ class MoneyToBonusConvector
         } catch (OptimisticLockException|ORMException $e) {
             throw new ConvectorException('Can\'t convert', 500, $e);
         }
+
+        $this->moneyRefund->refund($money->amount());
 
         return $bonus;
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BountyHunter\Domain\Bounty\Convector;
+namespace BountyHunter\Domain\Bounty\Converter;
 
 /**
  * Class ConvectorException
