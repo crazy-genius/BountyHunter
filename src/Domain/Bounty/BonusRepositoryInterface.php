@@ -31,4 +31,14 @@ interface BonusRepositoryInterface
      * @return int
      */
     public function count(?SpecificationInterface $specification = null): int;
+
+    /**
+     * @param BountyInterface $bounty
+     */
+    public function remove(BountyInterface $bounty): void;
+
+    /**
+     * @param BountyInterface $bounty
+     */
+    public function add(BountyInterface $bounty): void;
 }

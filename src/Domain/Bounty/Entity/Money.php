@@ -15,14 +15,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Money extends AbstractBounty
 {
-    /** @var int */
+    /**
+     * @var int
+     * @ORM\Column(name="amount", type="integer")
+     */
     private $amount;
 
     /**
      * Money constructor.
      *
      * @param User $owner
-     * @param int $amount
+     * @param int $amount //in cents
      */
     public function __construct(User $owner, int $amount)
     {
@@ -40,5 +43,25 @@ class Money extends AbstractBounty
     public function type(): BountyType
     {
         return BountyType::createMoneyType();
+    }
+
+    /**
+     * @return int
+     */
+    public function amount(): int
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param float $coefficient
+     *
+     * @return Bonus
+     */
+    public function toBonus(float $coefficient): Bonus
+    {
+        $amount = $this->amount * $coefficient;
+
+        return new Bonus($this->owner, (int)$amount);
     }
 }

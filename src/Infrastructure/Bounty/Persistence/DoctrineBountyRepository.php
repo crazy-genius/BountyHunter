@@ -6,6 +6,7 @@ namespace BountyHunter\Infrastructure\Bounty\Persistence;
 
 use BountyHunter\Domain\Bounty\BonusRepositoryInterface;
 use BountyHunter\Domain\Bounty\Entity\AbstractBounty;
+use BountyHunter\Domain\Bounty\Entity\BountyInterface;
 use BountyHunter\Domain\Bounty\Specification\SpecificationInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -68,6 +69,19 @@ class DoctrineBountyRepository implements BonusRepositoryInterface
         $countResult = \array_pop($countResults);
 
         return !empty($countResult) && isset($countResult['cnt']) ? (int)$countResult['cnt'] : 0;
+    }
+
+    /** @inheritDoc */
+    public function remove(BountyInterface $bounty): void
+    {
+        $this->entityManager->remove($bounty);
+    }
+
+    /** @inheritDoc */
+    public function add(BountyInterface $bounty): void
+    {
+        $this->entityManager->persist($bounty);
+        $this->entityManager->flush($bounty);
     }
 
     private function createQueryBuilder(): QueryBuilder

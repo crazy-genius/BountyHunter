@@ -15,7 +15,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Bonus extends AbstractBounty
 {
-    /** @var int */
+    /**
+     * @var int
+     * @ORM\Column(name="amount", type="integer")
+     */
     private $amount;
 
     /**

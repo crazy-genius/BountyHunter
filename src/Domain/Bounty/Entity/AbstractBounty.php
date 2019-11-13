@@ -46,6 +46,8 @@ abstract class AbstractBounty implements BountyInterface
 
     /**
      * @var User
+     * @ORM\ManyToOne(targetEntity="BountyHunter\Domain\User\Entity\User")
+     * @ORM\JoinColumn(name="owner", referencedColumnName="id")
      */
     protected $owner;
 
@@ -66,6 +68,12 @@ abstract class AbstractBounty implements BountyInterface
     public function __toString(): string
     {
         return 'The bounty is ' . $this->type();
+    }
+
+    /** @inheritDoc */
+    public function refuse(): void
+    {
+        $this->refused = true;
     }
 
     /** @inheritDoc */
