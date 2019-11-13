@@ -7,16 +7,19 @@ namespace BountyHunter\UI\Web\Bounty\Controller;
 use BountyHunter\Domain\Bounty\BonusRepositoryInterface;
 use BountyHunter\Domain\Bounty\BountyReturnException;
 use BountyHunter\Domain\Bounty\BountyReturnService;
+use BountyHunter\Domain\Bounty\Converter\ConverterException;
+use BountyHunter\Domain\Bounty\Converter\MoneyToBonusConverter;
+use BountyHunter\Domain\Bounty\Entity\Money;
 use BountyHunter\Domain\Bounty\Generator\BountyGenerator;
 use BountyHunter\Domain\Bounty\Generator\CouldNotGenerateBountyException;
 use BountyHunter\Domain\Bounty\Generator\NoMoreBountyException;
 use BountyHunter\Domain\Bounty\Specification\ByOwnerSpecification;
 use Ramsey\Uuid\Uuid;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class BountyController
@@ -128,6 +131,46 @@ class BountyController extends AbstractController
         } catch (BountyReturnException $e) {
             return new Response('Could\'t reject bounty', 500);
         }
+
+        return new RedirectResponse('/');
+    }
+
+    /**
+     * @Route("/bounty/convert/{bountyCode}", name="convert_bounty")
+     * @param string $bountyCode
+     *
+     * @param MoneyToBonusConverter $converter
+     *
+     * @return Response
+     */
+    public function convert(string $bountyCode, MoneyToBonusConverter $converter): Response
+    {
+        if (empty($bountyCode)) {
+            return new Response('No bounty code provided', 400);
+        }
+
+        try {
+            $bounty = $this->bountyRepository->get(Uuid::fromString($bountyCode));
+        } catch (BountyReturnException $e) {
+            //TODO make logic to decide status code
+            return new Response('No bounty found', 404);
+        }
+
+        if ($bounty->isSent()) {
+            return new Response('Already sent', 400);
+        }
+
+        if (!$bounty instanceof Money) {
+            return new Response('No supports', 400);
+        }
+
+        try {
+            $bonus = $converter->convert($bounty);
+        } catch (ConverterException $e) {
+            return new Response('Could\'t convert', 500);
+        }
+
+        $this->bountyRepository->save($bonus);
 
         return new RedirectResponse('/');
     }

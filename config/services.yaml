@@ -23,6 +23,8 @@ services:
         resource: '../src/UI/Web/Bounty/Controller/'
         tags: ['controller.service_arguments']
 
+    BountyHunter\Domain\Money\RefundService:
+
     BountyHunter\Infrastructure\Bounty\AllBountiesProvider:
         public: false
     BountyHunter\Domain\Bounty\AllowedBountyTypesProviderInterface:
@@ -31,6 +33,11 @@ services:
     BountyHunter\Domain\Bounty\Generator\BountyGenerator:
     BountyHunter\Domain\Bounty\BountyFactory:
     BountyHunter\Domain\Bounty\BountyReturnService:
+    BountyHunter\Domain\Bounty\Converter\MoneyToBonusConverter:
+        arguments:
+            - '%env(resolve:CONVERT_COEFFICIENT)%'
+            - '@doctrine.orm.entity_manager'
+            - '@BountyHunter\Domain\Money\RefundService'
 
     BountyHunter\Infrastructure\User\Persistence\:
         resource: '../src/Infrastructure/User/Persistence/'

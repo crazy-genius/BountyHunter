@@ -26,5 +26,9 @@ test: composer_install composer_autoload
 first_start: start
 	composer_install
 	composer_autoload
+	composer_env
 	${DOCKER} bin/console make:migrate --allow-no-migration -n
 	${DOCKER} bin/console doctrine:fixtures:load -n
+
+send:
+	${DOCKER} bin/console bounty:delivery:money -p 2

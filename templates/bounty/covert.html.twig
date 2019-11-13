@@ -1,0 +1,3 @@
+{%- if bounty.type.__toString == "MONEY" and bounty.sent == false -%}
+<p><a href="/bounty/convert/{{ bounty.id }}">Конвертировать в бонусы</a></p>
+{%- endif -%}
